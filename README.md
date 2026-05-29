@@ -34,7 +34,7 @@ sudo dnf install gcc gcc-c++ make cmake tar curl zip unzip git
 
 ## Installing wyrm
 ```shell
-git clone git@github.com:nick-Sutton/wyrm.git
+git clone https://github.com/nick-Sutton/wyrm.git
 ```
 
 ## Building
