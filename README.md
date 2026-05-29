@@ -1,8 +1,6 @@
 # Wyrm
 Wyrm is a NetNet client for OptiTrack Camera systems. The Wyrm daemon simplifies interacting with OptiTrack systems by managing networking and allowing applications to retrieved data from their OptiTrack system using Zenoh Pub/Sub. 
 
-# Installation and Building
-
 ## Requirments
 ### Compilers and CMake
 wyrm supports both the [GCC](https://gcc.gnu.org/) and [Clang](https://clang.llvm.org/) compiler tool chains and targets the [C++ 17](https://en.cppreference.com/cpp/17) standard. wyrm also uses [CMake](https://cmake.org/) as its build system.
