@@ -23,7 +23,7 @@ sudo dnf install gcc gcc-c++ make cmake tar curl zip unzip git
 1. Install the [NatNet SDK](https://optitrack.com/software/natnet-sdk) for your OS.
 2. Extract the archive to the NatNetSDK folder:
     ```shell
-    sudo mkdir ~/NatNetSDK
+    mkdir ~/NatNetSDK
     sudo tar -xf Downloads/tar_archive_name.tar -C ~/NatNetSDK
     echo 'export NATNET_SDK_ROOT=~/NatNetSDK' >> ~/.bashrc
     source ~/.bashrc
