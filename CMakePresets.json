@@ -1,0 +1,28 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "default",
+      "inherits": "base",
+      "cacheVariables": {
+        "WYRM_COMPILER": "gcc"
+      }
+    },
+    {
+      "name": "clang",
+      "inherits": "base",
+      "cacheVariables": {
+        "WYRM_COMPILER": "clang"
+      }
+    }
+  ]
+}
