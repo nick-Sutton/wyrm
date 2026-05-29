@@ -66,6 +66,8 @@ target_link_libraries(wyrm PRIVATE
     argparse::argparse
 )
 
+target_include_directories(wyrm PRIVATE ${CMAKE_SOURCE_DIR})
+
 # Tests
 add_executable(tests test/test.cpp)
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
