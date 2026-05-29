@@ -24,7 +24,7 @@ sudo dnf install gcc gcc-c++ make cmake tar curl zip unzip git
 2. Extract the archive to the NatNetSDK folder:
     ```shell
     mkdir ~/NatNetSDK
-    sudo tar -xf Downloads/tar_archive_name.tar -C ~/NatNetSDK
+    tar -xf ~/Downloads/tar_archive_name.tar -C ~/NatNetSDK
     echo 'export NATNET_SDK_ROOT=~/NatNetSDK' >> ~/.bashrc
     source ~/.bashrc
     ```
