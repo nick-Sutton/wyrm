@@ -18,8 +18,8 @@ CmdArgs parseArgs(int argc, char *argv[]) {
 
     try {
         program.parse_args(argc, argv);
-    } catch (const std::exception& err) {
-        std::cerr << err.what() << "\n";
+    } catch (const std::exception& e) {
+        fmt::println(stderr, "{}", e.what());
         std::cerr << program;
         std::exit(EXIT_FAILURE); // This is kind of bad... forgive me -_-
     }
