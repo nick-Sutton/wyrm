@@ -30,7 +30,9 @@ sudo dnf install gcc gcc-c++ make cmake tar curl zip unzip git
     ```
 
 ### Zenoh
-[Zenoh](https://zenoh.io/) is a communication protocal, and software stack that wyrm uses to publish data from the NatNet client. To install Zenoh C++ follow these [instructions](https://github.com/eclipse-zenoh/zenoh-cpp).
+[Zenoh](https://zenoh.io/) is a communication protocal, and software stack that wyrm uses to publish data from the NatNet client. 
+1. Install Zenoh-c locally(~/.local) by following these [instructions](https://github.com/eclipse-zenoh/zenoh-c).
+2. Install Zenoh-cpp locally(~/.local) by following these [instructions](https://github.com/eclipse-zenoh/zenoh-cpp).
 
 ## Installing wyrm
 ```shell
