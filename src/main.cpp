@@ -4,8 +4,12 @@
 #include <fmt/color.h>
 #include "NatNetTypes.h"
 #include "NatNetClient.h"
+#include "zenoh.hxx"
 #include "include/types.hpp"
 #include "include/io.hpp"
+
+using namespace zenoh;
+
 
 void connectToServer(NatNetClient& client, const WyrmConfig wyrmCfg) {
     // Connect to Server
@@ -92,9 +96,30 @@ int main(int argc, char *argv[]) {
         // Connect callbacks
         // TODO
 
-        // Setup DDS Session
-        // TODO
+        // Configure Zenoh Session
+        init_log_from_env_or("error");
+        Config cfg = Config::create_default();
+        auto session = Session::open(std::move(cfg));
 
+        // Create a publisher for send data
+        auto pub = session.declare_publisher(KeyExpr(wyrm_pub_keyexpr))
+
+        // Create a subscriber to recieve commands
+        // auto sub = session.declare_subscriber(wyrm_pub_keyexpr, &data_handler, closures::none);
+
+
+
+
+        // 1. In Mocap Callback -> Put data into a buffer
+        // 2. Loop forever, take data out of buffer -> Package message for Zenoh -> call put on zenoh session.
+
+        while (true) {
+            // request data from server via callback (callback just puts data in the data buffer)
+
+            // Process a packet of data from the buffer
+
+            // Send data over Zenoh session
+        }
         // Loop to receive data from server
         //  Read data from server
         //  Package data for Zenoh
@@ -111,6 +136,8 @@ int main(int argc, char *argv[]) {
     } catch (const std::exception& e) {
         fmt::print(stderr, bg(fmt::color::crimson), "[Exception] {}\n", e.what());
         return EXIT_FAILURE;
+    } catch (ZException e) {
+        fmt::print(stderr, bg(fmt::color::crimson), "[Zenoh Error] {}\n", e.what());
     }
     return EXIT_SUCCESS;
 }

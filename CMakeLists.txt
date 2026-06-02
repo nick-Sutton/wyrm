@@ -52,9 +52,11 @@ FetchContent_MakeAvailable(fmt Catch2 tomlplusplus argparse)
 # NatNet
 find_package(NatNet REQUIRED)
 
-# Zenoh - order matters, zenohc must come before zenohcxx
+# Zenoh - zenohc must come before zenohcxx
 find_package(zenohc REQUIRED)
 find_package(zenohcxx REQUIRED)
+
+find_package(fastcdr REQUIRED)
 
 # Core executable
 add_executable(wyrm
@@ -74,6 +76,7 @@ target_link_libraries(wyrm PRIVATE
     tomlplusplus::tomlplusplus
     argparse::argparse
     zenohcxx::zenohc
+    fastcdr  
 )
 
 target_include_directories(wyrm PRIVATE ${CMAKE_SOURCE_DIR})

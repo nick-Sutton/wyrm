@@ -61,6 +61,16 @@ sudo dnf install gcc gcc-c++ make cmake tar curl zip unzip git
     cd / && rm -rf /tmp/zenoh-cpp
     ```
 
+### Fast-CDR
+[Fast-CDR](https://github.com/eProsima/Fast-CDR) is a data serialization library for C++.
+```shell
+git clone https://github.com/eProsima/Fast-CDR.git /tmp/Fast-CDR
+cd /tmp/Fast-CDR && mkdir build && cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/.local
+cmake --build . --target install
+cd / && rm -rf /tmp/Fast-CDR
+```
+
 ### Environment
 Add a CMake path to the newly installed libraries:
 ```shell
