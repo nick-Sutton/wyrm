@@ -1,11 +1,11 @@
 find_path(NatNet_INCLUDE_DIR
     NAMES NatNetClient.h NatNetCAPI.h NatNetTypes.h NatNetRequests.h NatNetRepeater.h
-    HINTS $ENV{NATNET_SDK_ROOT}/include
+    HINTS $ENV{HOME}/.local/include/NatNet
 )
 
 find_library(NatNet_LIBRARY
     NAMES NatNet
-    HINTS $ENV{NATNET_SDK_ROOT}/lib
+    HINTS $ENV{HOME}/.local/lib
 )
 
 include(FindPackageHandleStandardArgs)

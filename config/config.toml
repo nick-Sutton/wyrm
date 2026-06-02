@@ -1,6 +1,6 @@
 [networking]
 use_multicast = false # Unicast = false / Multicast = true
-server_address = "192.168.0.26" # Address in the Motive Software
+server_address = "169.254.54.134" # Address in the Motive Software
 client_address = "0.0.0.0" # Client Computers IP (Make sure they are on the same subnet)
 multicast_address = "239.255.42.99"
 command_port = 1510

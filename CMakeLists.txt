@@ -26,13 +26,13 @@ include(FetchContent)
 FetchContent_Declare(
     fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-    GIT_TAG 12.1.0 
+    GIT_TAG 12.1.0
 )
 
 FetchContent_Declare(
     Catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG v3.15.0 
+    GIT_TAG v3.15.0
 )
 
 FetchContent_Declare(
@@ -52,8 +52,12 @@ FetchContent_MakeAvailable(fmt Catch2 tomlplusplus argparse)
 # NatNet
 find_package(NatNet REQUIRED)
 
+# Zenoh - order matters, zenohc must come before zenohcxx
+find_package(zenohc REQUIRED)
+find_package(zenohcxx REQUIRED)
+
 # Core executable
-add_executable(wyrm 
+add_executable(wyrm
     src/main.cpp
     src/io.cpp
 )
@@ -63,11 +67,13 @@ target_include_directories(wyrm
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
 )
+
 target_link_libraries(wyrm PRIVATE
     NatNet::NatNet
     fmt::fmt
     tomlplusplus::tomlplusplus
     argparse::argparse
+    zenohcxx::zenohc
 )
 
 target_include_directories(wyrm PRIVATE ${CMAKE_SOURCE_DIR})
