@@ -10,7 +10,7 @@ std::vector<uint8_t> SerializeFrame(const WyrmFrame& frame) {
     cdr << frame.timestamp;
     cdr << frame.precision_timestamp_secs;
     cdr << frame.precision_timestamp_fractional_secs;
-    cdr << PackFrameFlags(frame);
+    cdr << static_cast<uint32_t>(PackFrameFlags(frame)); // This is cast to a u32 for alignment
     cdr << frame.body_count;
 
     for (const auto& body : frame.bodies) {
@@ -19,7 +19,7 @@ std::vector<uint8_t> SerializeFrame(const WyrmFrame& frame) {
         cdr << body.x << body.y << body.z;
         cdr << body.qx << body.qy << body.qz << body.qw;
         cdr << body.mean_error;
-        cdr << PackBodyFlags(body);
+        cdr << static_cast<uint32_t>(PackBodyFlags(body)); // This is cast to a u32 for alignment
     }
 
     return std::vector<uint8_t>(

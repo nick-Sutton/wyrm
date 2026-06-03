@@ -76,7 +76,7 @@ WyrmFrame ToWyrmFrame(const sFrameOfMocapData& src,
                               const DescriptionTable& descriptions);
 WyrmDescription ToWyrmDescription(const sRigidBodyDescription& src);
 void BuildDescriptionTable(sDataDescriptions* desc, WyrmContext& ctx);
-uint8_t PackBodyFlags(const WyrmRigidBody& b);
-uint8_t PackFrameFlags(const WyrmFrame& f);
+uint32_t PackBodyFlags(const WyrmRigidBody& b);
+uint32_t PackFrameFlags(const WyrmFrame& f);
 void UnpackBodyFlags(uint8_t flags, WyrmRigidBody& b);
 void UnpackFrameFlags(uint8_t flags, WyrmFrame& f);

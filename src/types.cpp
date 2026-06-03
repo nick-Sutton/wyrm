@@ -63,14 +63,14 @@ void BuildDescriptionTable(sDataDescriptions* desc, WyrmContext& ctx) {
     }
 }
 
-uint8_t PackBodyFlags(const WyrmRigidBody& b) {
+uint32_t PackBodyFlags(const WyrmRigidBody& b) {
     uint8_t flags = 0;
     if (b.tracking_lost) flags |= 0x01;
     if (b.model_filled)  flags |= 0x02;
     return flags;
 }
 
-uint8_t PackFrameFlags(const WyrmFrame& f) {
+uint32_t PackFrameFlags(const WyrmFrame& f) {
     uint8_t flags = 0;
     if (f.is_recording)       flags |= 0x01;
     if (f.model_list_changed) flags |= 0x02;
