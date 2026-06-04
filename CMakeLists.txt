@@ -17,8 +17,9 @@ project(wyrm CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# CMake Modules
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+# Build Options
+option(WYRM_BUILD_DAEMON  "Build the wyrm daemon"       ON)
+option(WYRM_BUILD_TESTS   "Build tests"                 ON)
 
 # FetchContent Dependencies
 include(FetchContent)
@@ -49,41 +50,19 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(fmt Catch2 tomlplusplus argparse)
 
-# NatNet
-find_package(NatNet REQUIRED)
-
-# Zenoh - zenohc must come before zenohcxx
+# External Deps
 find_package(zenohc REQUIRED)
 find_package(zenohcxx REQUIRED)
-
 find_package(fastcdr REQUIRED)
 
-# Core executable
-add_executable(wyrm
-    src/main.cpp
-    src/io.cpp
-    src/types.cpp
-    src/serialization.cpp
-    src/net.cpp
-)
+add_subdirectory(wyrm-cpp)
 
-target_include_directories(wyrm
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-)
 
-target_link_libraries(wyrm PRIVATE
-    NatNet::NatNet
-    fmt::fmt
-    tomlplusplus::tomlplusplus
-    argparse::argparse
-    zenohcxx::zenohc
-    fastcdr  
-)
+if(WYRM_BUILD_DAEMON)
+    find_package(NatNet REQUIRED)
+    add_subdirectory(wyrmd)
+endif()
 
-target_include_directories(wyrm PRIVATE ${CMAKE_SOURCE_DIR})
-
-# Tests
-add_executable(tests test/test.cpp)
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
+if(WYRM_BUILD_TESTS)
+    add_subdirectory(tests)
+endif()

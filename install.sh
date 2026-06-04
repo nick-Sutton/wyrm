@@ -92,3 +92,5 @@ else
 fi
 
 log "All dependencies installed. Run 'source ~/.bashrc' to update your environment."
+
+# ── Setup System Daemon ─────────────────────────────────────────────────────────

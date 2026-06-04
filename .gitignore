@@ -54,3 +54,21 @@ CMakeUserPresets.json
 *.vsix
 .history
 .ionide
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Python build artifacts
+*.egg-info/
+.egg-fno
+dist/
+build/
+*.egg

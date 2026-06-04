@@ -4,8 +4,8 @@ Wyrm is a NetNet client for OptiTrack Camera systems. The Wyrm daemon simplifies
 ## Requirments
 Wyrm has an installtion script to automate the installation process. After cloning the Wrym repo run the following commands:
 ```shell
-chmod +x ./install_deps.sh
-./install_deps.sh
+chmod +x ./install.sh
+./install.sh
 source ~/.bashrc
 ```
 If you would prefer to install the Wyrm dependencies manually use the following instructions.
