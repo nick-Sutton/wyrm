@@ -12,7 +12,7 @@ chmod +x ./install.sh
 ./install.sh
 source ~/.bashrc
 ```
-If you would prefer to install the Wyrm dependencies manually use the following instructions.
+If you would prefer to install the Wyrm dependencies manually use the following [instructions](https://github.com/nick-Sutton/wyrm/blob/main/docs/manual.md).
 
 ## Building
 In the wyrm root directory run:
