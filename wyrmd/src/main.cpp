@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
 
     try {
         // Setup and connect to NatNet server
-        WyrmConfig wyrm_cfg = ParseMotiveConfig();
+        WyrmConfig wyrm_cfg = io.ParseMotiveConfig();
         io.LogMessage("Creating Client", INFO);
         NatNetClient client{};
         ConnectToServer(client, wyrm_cfg);

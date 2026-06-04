@@ -16,15 +16,16 @@ class IOHandler {
     bool        printing = false;
     bool        logging  = false;
     std::string log_path;
+    std::string log_dir;
+    std::string config_path;
 
  public:
     IOHandler(int argc, char* argv[]);
     bool IsPrinting() const;
     void LogMessage(const std::string& msg, const std::string_view = INFO) const;
     void LogConfig(const WyrmConfig& cfg) const;
+    WyrmConfig ParseMotiveConfig();
 
  private:
     std::string GenerateLogPath(const std::string& log_dir) const;
 };
-
-WyrmConfig ParseMotiveConfig(const std::string& path = "./config/config.toml");

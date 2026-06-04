@@ -11,7 +11,12 @@ IOHandler::IOHandler(int argc, char* argv[]) {
     program.add_argument("-p", "--printing")
         .help("Print information to the console.")
         .flag();
-
+    program.add_argument("-c", "--config")
+        .default_value(std::string("./wyrmd/config/config.toml"))
+        .help("Path to a config.toml file.");
+    program.add_argument("-l", "--logs")
+        .default_value(std::string("./wyrmd/logs"))
+        .help("Path to a logs directory.");
     try {
         program.parse_args(argc, argv);
     } catch (const std::exception& e) {
@@ -20,9 +25,12 @@ IOHandler::IOHandler(int argc, char* argv[]) {
         std::exit(EXIT_FAILURE);
     }
 
+    config_path = program.get<std::string>("--config");
+    log_dir = program.get<std::string>("--logs");
+
     printing = program.get<bool>("--printing");
     if (!printing) {
-        log_path = GenerateLogPath("./logs");
+        log_path = GenerateLogPath(log_dir);
     }
 }
 
@@ -64,8 +72,8 @@ std::string IOHandler::GenerateLogPath(const std::string& log_dir) const {
     return fmt::format("{}/wyrm_{:%Y-%m-%d_%H-%M-%S}.log", log_dir, now);
 }
 
-WyrmConfig ParseMotiveConfig(const std::string& path) {
-    toml::table tbl = toml::parse_file(path);
+WyrmConfig IOHandler::ParseMotiveConfig() {
+    toml::table tbl = toml::parse_file(config_path);
     WyrmConfig cfg;
     cfg.server_command_port = tbl["networking"]["command_port"].value<uint16_t>().value_or(0);
     cfg.server_data_port    = tbl["networking"]["data_port"].value<uint16_t>().value_or(0);
