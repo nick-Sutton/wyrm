@@ -19,9 +19,12 @@ WyrmRigidBody ToWyrmBody(const sRigidBodyData& src,
 
     auto it = descriptions.find(src.ID);
     if (it != descriptions.end()) {
-        std::strncpy(body.name, it->second.name, MAX_NAMELENGTH - 1);
+        // Replacing: std::strncpy(body.name, it->second.name, MAX_NAMELENGTH - 1);
+        body.name = it->second.name.substr(0, MAX_NAMELENGTH - 1);
     } else {
-        std::snprintf(body.name, MAX_NAMELENGTH, "body_%d", src.ID);
+        // Replacing std::snprintf(body.name, MAX_NAMELENGTH, "body_%d", src.ID);
+        std::string formatted_name = "body_" + std::to_string(src.ID);
+        body.name = formatted_name.substr(0, MAX_NAMELENGTH - 1);
     }
     return body;
 }
@@ -49,7 +52,9 @@ WyrmDescription ToWyrmDescription(const sRigidBodyDescription& src) {
     description.id          = src.ID;
     description.parent_id   = src.parentID;
     description.num_markers = src.nMarkers;
-    std::strncpy(description.name, src.szName, MAX_NAMELENGTH - 1);
+    // Replacing std::strncpy(description.name, src.szName, MAX_NAMELENGTH - 1);
+    std::string raw_name(src.szName);
+    description.name = raw_name.substr(0, MAX_NAMELENGTH - 1);
     return description;
 }
 
