@@ -1,4 +1,3 @@
-#include <cstring>
 #include <stdexcept>
 #include "net.hpp"
 
@@ -19,9 +18,9 @@ WyrmRigidBody ToWyrmBody(const sRigidBodyData& src,
 
     auto it = descriptions.find(src.ID);
     if (it != descriptions.end()) {
-        std::strncpy(body.name, it->second.name, MAX_NAMELENGTH - 1);
+        body.name = it->second.name;
     } else {
-        std::snprintf(body.name, MAX_NAMELENGTH, "body_%d", src.ID);
+        body.name = "body_" + std::to_string(src.ID);
     }
     return body;
 }
@@ -49,7 +48,7 @@ WyrmDescription ToWyrmDescription(const sRigidBodyDescription& src) {
     description.id          = src.ID;
     description.parent_id   = src.parentID;
     description.num_markers = src.nMarkers;
-    std::strncpy(description.name, src.szName, MAX_NAMELENGTH - 1);
+    description.name = src.szName;
     return description;
 }
 

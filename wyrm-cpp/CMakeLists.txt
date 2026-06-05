@@ -43,3 +43,7 @@ install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/wyrm-cpp-config.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/wyrm-cpp
 )
+
+if(WYRM_BUILD_TESTS)
+    add_subdirectory(tests)
+endif()

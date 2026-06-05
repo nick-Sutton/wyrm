@@ -1,7 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <wyrm/types.hpp> 
+#include <unordered_map>
+#include <wyrm/types.hpp>
 
 std::vector<uint8_t> SerializeFrame(const WyrmFrame& frame);
 std::vector<uint8_t> SerializeDescriptions(const std::unordered_map<int32_t, WyrmDescription>& descriptions);

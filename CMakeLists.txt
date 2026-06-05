@@ -55,6 +55,10 @@ find_package(zenohc REQUIRED)
 find_package(zenohcxx REQUIRED)
 find_package(fastcdr REQUIRED)
 
+if(WYRM_BUILD_TESTS)
+    enable_testing()
+endif()
+
 add_subdirectory(wyrm-cpp)
 
 
@@ -62,8 +66,4 @@ if(WYRM_BUILD_DAEMON)
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/wyrmd/cmake")
     find_package(NatNet REQUIRED)
     add_subdirectory(wyrmd)
-endif()
-
-if(WYRM_BUILD_TESTS)
-    add_subdirectory(tests)
 endif()
