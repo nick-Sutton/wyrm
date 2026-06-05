@@ -1,4 +1,4 @@
-# Wyrm ![version](https://img.shields.io/badge/version-0.1.0-blue)
+# Wyrm ![version](https://img.shields.io/badge/version-1.0.0-blue)
 Wyrm is a NetNet client for OptiTrack Camera systems. The Wyrm daemon simplifies interacting with OptiTrack systems by managing networking and allowing applications to retrieved data from their OptiTrack system using Zenoh Pub/Sub.
 
 ## Installation
@@ -16,6 +16,7 @@ source ~/.bashrc
 ```
 If you would prefer to install the Wyrm dependencies manually use the following [instructions](https://github.com/nick-Sutton/wyrm/blob/main/docs/manual.md).
 
+#### Build
 ```shell
 cd wyrm
 cmake --preset gcc
