@@ -21,7 +21,7 @@ def deserialize_frame(data: bytes) -> WyrmFrame:
     Returns:
         A WyrmFrame storing the deserialized data
     """
-    raw = _CdrFrame.deserialize(data)
+    raw = _CdrFrame.deserialize(data, has_header=False)
     return WyrmFrame(
         frame_id           = int(raw.frame_id),
         timestamp          = float(raw.timestamp),
@@ -59,7 +59,7 @@ def deserialize_descriptions(data: bytes) -> dict[int, WyrmDescription]:
     Returns:
         A Dictionary that maps a Rigidbodies Id to its WyrmDescription
     """
-    raw = _CdrDescriptions.deserialize(data)
+    raw = _CdrDescriptions.deserialize(data, has_header=False)
     return {
         int(d.id): WyrmDescription(
             id          = int(d.id),
