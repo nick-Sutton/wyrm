@@ -8,9 +8,6 @@ authors = [
     { name = "Nicholas Sutton", email = "nicksutton46@gmail.com" }
 ]
 requires-python = ">=3.10"
-dependencies = [
-    "pycdr2>=1.0.0",
-]
 
 [project.urls]
 Repository = "https://github.com/nick-Sutton/wyrm"
