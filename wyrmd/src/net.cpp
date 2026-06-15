@@ -139,6 +139,7 @@ void ConnectToServer(NatNetClient& client, const WyrmConfig& cfg) {
  * @param user_data WyrmContext that stores the Frame queue
  */
 void NATNET_CALLCONV frame_callback(sFrameOfMocapData* data, void* user_data) {
+    
     auto* ctx = static_cast<WyrmContext*>(user_data);
     WyrmFrame frame;
     {

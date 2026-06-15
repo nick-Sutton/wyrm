@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
             wyrm_ctx.buffer_cv.wait(lock, [&]{
                 return !wyrm_ctx.frame_buffer.empty() || !g_running;
             });
-
+            // The print statement was here
             if (!g_running) break; // Break if a signal is received 
 
             // Get the first frame in the buffer
