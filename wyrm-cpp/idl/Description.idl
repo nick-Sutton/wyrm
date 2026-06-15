@@ -5,6 +5,7 @@
 
 module wyrm_msgs {
   module msg {
+    @extensibility(APPENDABLE)
     struct Description {
       int32 id;
 

@@ -1,5 +1,6 @@
 module geometry_msgs {
   module msg {
+    @extensibility(APPENDABLE)
     struct Point {
       double x;
       double y;

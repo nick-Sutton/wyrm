@@ -2,10 +2,11 @@
 // with input from wyrm_msgs/msg/Frame.msg
 // generated code does not contain a copyright notice
 
-#include "RigidBodies.idl"
+#include "RigidBody.idl"
 
 module wyrm_msgs {
   module msg {
+    @extensibility(APPENDABLE)
     struct Frame {
       int32 frame_id;
 
@@ -21,7 +22,7 @@ module wyrm_msgs {
 
       uint32 body_count;
 
-      sequence<wyrm_msgs::msg::RigidBodies> bodies;
+      sequence<wyrm_msgs::msg::RigidBody> bodies;
     };
   };
 };

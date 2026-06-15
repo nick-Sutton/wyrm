@@ -8,7 +8,7 @@ idlc_generate(TARGET wyrm-idl
         idl/geometry_msgs/msg/Point.idl
         idl/geometry_msgs/msg/Quaternion.idl
         idl/Description.idl
-        idl/RigidBodies.idl
+        idl/RigidBody.idl
         idl/Frame.idl
     INCLUDES
         ${CMAKE_CURRENT_SOURCE_DIR}/idl
