@@ -1,0 +1,8 @@
+int32 frame_id
+float64 timestamp
+uint32 precision_timestamp_secs
+uint32 precision_timestamp_fractional_secs
+bool is_recording
+bool model_list_changed
+uint32 body_count
+wyrm_msgs/RigidBody[] bodies

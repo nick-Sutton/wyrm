@@ -1,0 +1,21 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from wyrm_msgs/msg/Description.msg
+// generated code does not contain a copyright notice
+
+
+module wyrm_msgs {
+  module msg {
+    module dds_ {
+      @final
+      struct Description_ {
+        int32 id;
+
+        int32 parent_id;
+
+        string name;
+
+        int32 num_markers;
+      };
+    };
+  };
+};

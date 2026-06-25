@@ -22,7 +22,8 @@ void BuildDescriptionTable(sDataDescriptions* desc, WyrmContext& ctx) {
             WyrmDescription d = ToWyrmDescription(
                 *desc->arrDataDescriptions[i].Data.RigidBodyDescription
             );
-            ctx.descriptions[d.id] = d;
+            ctx.descriptions[d.id()] = d;
+            ctx.description_writer->write(d);  // publishing description data
         }
     }
 }

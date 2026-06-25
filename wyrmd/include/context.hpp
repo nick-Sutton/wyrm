@@ -10,24 +10,25 @@
 
 #pragma once
 
-#include "zenoh.hxx"
 #include "NatNetTypes.h"
 #include "NatNetClient.h"
+#include "dds/dds.hpp"
 #include <string>
 #include <queue>
 #include <unordered_map>
 #include <mutex>
 #include <condition_variable>
-#include <wyrm/types.hpp> 
+#include <wyrm/aliases.hpp> 
 
 /** A Context Holds all the data that percists during the wyrm runtime */
 struct WyrmContext {
-    zenoh::Session*                                             session;
     std::mutex                                                  buffer_mutex;
     std::mutex                                                  descriptions_mutex;
     std::condition_variable                                     buffer_cv;
     std::unordered_map<int32_t, WyrmDescription>                descriptions;
     std::queue<WyrmFrame>                                       frame_buffer;
+    dds::pub::DataWriter<WyrmDescription>*                      description_writer;
+    dds::pub::DataWriter<WyrmFrame>*                            frame_writer;
 };
 
 /** A Config stores all the network configuration settings needed to connect to the Motive Server */

@@ -51,37 +51,26 @@ cp /tmp/NatNetSDK/lib/libNatNet.so $HOME/.local/lib/
 rm -rf /tmp/NatNetSDK
 log "NatNet SDK installed."
 
-# Zenoh-C 
-log "Installing zenoh-c..."
+# Install Cyclone DDS
+log "Installing Cyclone-DDS..."
 
-git clone https://github.com/eclipse-zenoh/zenoh-c.git /tmp/zenoh-c
-cd /tmp/zenoh-c && mkdir build && cd build
+git clone https://github.com/eclipse-cyclonedds/cyclonedds.git /tmp/cyclonedds
+cd /tmp/cyclonedds && mkdir build && cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/.local
 cmake --build . -j$(nproc)
 cmake --install .
-cd / && rm -rf /tmp/zenoh-c
-log "zenoh-c installed."
+cd / && rm -rf /tmp/cyclonedds
+log "Cyclone-DDS installed."
 
-# Zenoh-CPP 
-log "Installing zenoh-cpp..."
-
-git clone https://github.com/eclipse-zenoh/zenoh-cpp.git /tmp/zenoh-cpp
-cd /tmp/zenoh-cpp && mkdir build && cd build
+# Install Cyclone DDS C++ bindings
+log "Installing Cyclone-DDS-CXX..."
+git clone https://github.com/eclipse-cyclonedds/cyclonedds-cxx.git /tmp/cyclonedds-cxx
+cd /tmp/cyclonedds-cxx && mkdir build && cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/.local -DCMAKE_PREFIX_PATH=$HOME/.local
 cmake --build . -j$(nproc)
 cmake --install .
-cd / && rm -rf /tmp/zenoh-cpp
-log "zenoh-cpp installed."
-
-# Fast-CDR
-log "Installing Fast-CDR..."
-
-git clone https://github.com/eProsima/Fast-CDR.git /tmp/Fast-CDR
-cd /tmp/Fast-CDR && mkdir build && cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/.local
-cmake --build . --target install
-cd / && rm -rf /tmp/Fast-CDR
-log "Fast-CDR installed."
+cd / && rm -rf /tmp/cyclonedds-cxx
+log "Cyclone-DDS-CXX installed."
 
 # Environment 
 if ! grep -q "CMAKE_PREFIX_PATH" $HOME/.bashrc; then

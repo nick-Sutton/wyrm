@@ -1,0 +1,29 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from wyrm_msgs/msg/RigidBodies.msg
+// generated code does not contain a copyright notice
+
+#include "geometry_msgs/msg/Point.idl"
+#include "geometry_msgs/msg/Quaternion.idl"
+
+module wyrm_msgs {
+  module msg {
+    module dds_ {
+     @final
+      struct RigidBody_ {
+        int32 id;
+
+        string name;
+
+        geometry_msgs::msg::Point position;
+
+        geometry_msgs::msg::Quaternion orientation;
+
+        double mean_error;
+
+        boolean tracking_lost;
+
+        boolean model_filled;
+      };
+    };
+  };
+};

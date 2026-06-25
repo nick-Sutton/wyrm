@@ -10,8 +10,5 @@
 
 #pragma once
 
-/* Key used to access the descriptions query through Zenoh */
-constexpr const char* WyrmDescKeyexpr  = "wyrm/query/descriptions";
-
-/* Key used to access the frame publisher through Zenoh */
-constexpr const char* WyrmFrameKeyexpr = "wyrm/pub/frame";
+constexpr const char* WyrmDescriptionTopic = "rt/WyrmDescription";
+constexpr const char* WyrmFrameTopic       = "rt/WyrmFrame";
