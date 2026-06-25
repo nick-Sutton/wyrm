@@ -16,7 +16,6 @@
 #include <fmt/color.h>
 #include "NatNetTypes.h"
 #include "NatNetClient.h"
-#include "zenoh.hxx"
 #include <wyrm/types.hpp> 
 #include <wyrm/serialization.hpp>
 #include <wyrm/keys.hpp>
@@ -45,10 +44,11 @@ int main(int argc, char* argv[]) {
 
         io.LogMessage("Configuring Wyrm Context", INFO);
 
-        // Setup Zenoh Session
+        // TODO: Setup Zenoh Session 
         auto config = zenoh::Config::create_default();
         auto session = zenoh::Session::open(std::move(config));
 
+        // TODO
         WyrmContext wyrm_ctx{};
         wyrm_ctx.session = &session;
 
@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
         client.GetDataDescriptionList(&descriptions);
         BuildDescriptionTable(descriptions, wyrm_ctx);
 
-        // Create a queryable for data descriptions
+        // TODO: Create a queryable for data descriptions
         auto queryable = wyrm_ctx.session->declare_queryable(
             WyrmDescKeyexpr,
             [&wyrm_ctx](const zenoh::Query& query) {
@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
                 io.LogMessage("Model list changed, descriptions updated.", INFO);
             }
 
-            // Send payload over Zenoh
+            // TODO Send payload over Zenoh
             auto payload = SerializeFrame(frame);
             session.put(WyrmFrameKeyexpr,
                         zenoh::Bytes(std::move(payload))
@@ -117,6 +117,7 @@ int main(int argc, char* argv[]) {
 
         client.Disconnect();
 
+    // TODO
     } catch (const zenoh::ZException& e) {
         io.LogMessage(e.what(), EXCEPTION);
         return EXIT_FAILURE;

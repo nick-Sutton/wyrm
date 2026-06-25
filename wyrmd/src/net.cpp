@@ -19,6 +19,8 @@
  */
 WyrmRigidBody ToWyrmBody(const sRigidBodyData& src,
                                  const std::unordered_map<int32_t, WyrmDescription>& descriptions) {
+
+    // Update to use new Structs
     WyrmRigidBody body{};
     body.id           = src.ID;
     body.x            = src.x;

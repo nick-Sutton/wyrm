@@ -22,7 +22,7 @@
 
 /** A Context Holds all the data that percists during the wyrm runtime */
 struct WyrmContext {
-    zenoh::Session*                                             session;
+    zenoh::Session*                                             session; // Change to Cyclone equivilent
     std::mutex                                                  buffer_mutex;
     std::mutex                                                  descriptions_mutex;
     std::condition_variable                                     buffer_cv;
