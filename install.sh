@@ -37,7 +37,7 @@ fi
 # NatNet 
 log "Installing NatNet SDK..."
 
-NATNET_ARCHIVE=$(find $HOME/Downloads -name "*.tar" | grep -i natnet | head -1)
+NATNET_ARCHIVE=$(find $HOME/Downloads -name "*.tar.*" | grep -i natnet | head -1)
 if [ -z "$NATNET_ARCHIVE" ]; then
     err "Could not find NatNet archive in ~/Downloads. Please download it from https://optitrack.com and place it in ~/Downloads."
 fi
