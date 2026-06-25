@@ -1,5 +1,5 @@
 # Wyrm ![version](https://img.shields.io/badge/version-1.0.0-blue)
-Wyrm is a NetNet client for OptiTrack Camera systems. The Wyrm daemon simplifies interacting with OptiTrack systems by managing networking and allowing applications to retrieved data from their OptiTrack system using Zenoh Pub/Sub.
+Wyrm is a NetNet client for OptiTrack Camera systems. The Wyrm daemon simplifies interacting with OptiTrack systems by managing networking and allowing applications to retrieved data from their OptiTrack system using CyloneDDS Pub/Sub.
 
 ## Installation
 #### Daemon and C++ Library
@@ -49,60 +49,115 @@ Run the wyrmd daemon:
 ./build/wyrmd/wyrmd # -p for printing
 ```
 ## C++ Example
+To run the C++ example, put the following lines in your CMakeLists.txt file:
+
+```cmake
+cmake_minimum_required(VERSION 3.16)
+project(wyrm-test)
+
+find_package(CycloneDDS-CXX REQUIRED)
+find_package(wyrm-cpp REQUIRED)
+
+add_executable(wyrm_test wyrm_test.cpp)
+target_link_libraries(wyrm_test PRIVATE
+    wyrm::wyrm-cpp
+    CycloneDDS-CXX::ddscxx
+)
+```
+
+Example: 
+
 ```cpp
 #include <iostream>
-#include <zenoh.hxx>
-#include <wyrm/keys.hpp>
-#include <wyrm/serialization.hpp>
+#include "dds/dds.hpp"
+#include <wyrm/aliases.hpp>
+#include <wyrm/topics.hpp>
+#include <thread>
+#include <chrono>
+
+using namespace org::eclipse::cyclonedds;
 
 int main() {
-    auto session = zenoh::Session::open(zenoh::Config::create_default());
+    /* ROS_DOMAIN_ID=42 */
+    dds::domain::DomainParticipant participant(42);
 
-    // Fetch descriptions once
-    for (auto& reply : session.get(WyrmDescKeyexpr, "")) {
-        if (reply.is_ok()) {
-            auto descriptions = DeserializeDescriptions(reply.get_ok().get_payload().as_vector());
-            for (const auto& [id, desc] : descriptions)
-                std::cout << "description: " << desc.name << "\n";
+    /* Descriptions */
+    dds::topic::Topic<WyrmDescription> description_topic(participant, WyrmDescriptionTopic);
+
+    dds::sub::qos::DataReaderQos description_reader_qos;
+    description_reader_qos << dds::core::policy::Durability::TransientLocal()
+             << dds::core::policy::Reliability::Reliable();
+    dds::sub::Subscriber subscriber(participant);
+    dds::sub::DataReader<WyrmDescription> desc_reader(subscriber, description_topic, description_reader_qos);
+
+    // Delay for reader to discover writer
+    dds::core::Duration wait(3, 0); // 3 seconds
+    desc_reader.wait_for_historical_data(wait);
+
+    auto descriptions = desc_reader.read();
+    for (const auto& sample : descriptions) {
+        if (sample.info().valid()) {
+            const auto& d = sample.data();
+            std::cout << "description id=" << d.id()
+                      << " name=" << d.name() << "\n";
         }
     }
 
-    // Subscribe to frames
-    auto sub = session.declare_subscriber(WyrmFrameKeyexpr, [](const zenoh::Sample& sample) {
-        auto frame = DeserializeFrame(sample.get_payload().as_vector());
-        std::cout << "frame " << frame.frame_id << ": " << frame.body_count << " bodies\n";
-        for (const auto& body : frame.bodies)
-            std::cout << "  " << body.name << ": ("
-                      << body.x << ", " << body.y << ", " << body.z << ")\n";
-    });
+    /* Frames */
+    dds::topic::Topic<WyrmFrame> frame_topic(participant, WyrmFrameTopic);
+    dds::sub::DataReader<WyrmFrame> frame_reader(subscriber, frame_topic);
+   
+    /* Read Condition for WaitSet */
+    dds::sub::cond::ReadCondition read_cond(
+        frame_reader,
+        dds::sub::status::DataState::new_data()
+    );
 
-    std::cin.get();
+    /* Waitset */
+    dds::core::cond::WaitSet waitset;
+    waitset += read_cond;
+
+    std::cout << "Listening for frames, Ctrl+C to quit...\n";
+
+    /* Waitset Loop */
+    while (true) {
+        try {
+            waitset.wait(dds::core::Duration(5, 0));
+        } catch (const dds::core::TimeoutError&) {
+            std::cout<<"no frames recevied in 5s, waiting...\n";
+            continue;
+        }
+        for (const auto& sample : frame_reader.take()) {
+            if (!sample.info().valid()) continue;
+            const auto& f = sample.data();
+            std::cout << "frame " << f.frame_id()
+                      << ": " << f.body_count() << " bodies\n";
+            for (const auto& body : f.bodies()) {
+                std::cout << "  " << body.name()
+                          << ": (" << body.position().x()
+                          << ", "  << body.position().y()
+                          << ", "  << body.position().z() << ")\n";
+            }
+        }
+    }
 }
 ```
 ## Python Example
 ```python
-import zenoh
-from wyrmpy import deserialize_frame, deserialize_descriptions
-from wyrmpy.keys import WYRM_FRAME_KEYEXPR, WYRM_DESC_KEYEXPR
-
-with zenoh.open(zenoh.Config()) as session:
-    # Fetch descriptions
-    for reply in session.get(WYRM_DESC_KEYEXPR):
-        descriptions = deserialize_descriptions(bytes(reply.ok.payload))
-        for desc in descriptions.values():
-            print(desc)
-
-    # Subscribe to frames
-    def on_frame(sample):
-        frame = deserialize_frame(bytes(sample.payload))
-        print(f"frame {frame.frame_id}: {frame.body_count} bodies")
-        for body in frame.bodies:
-            print(f"  {body.name}: ({body.x:.3f}, {body.y:.3f}, {body.z:.3f})")
-
-    sub = session.declare_subscriber(WYRM_FRAME_KEYEXPR, on_frame)
-    input("Press Enter to quit\n")
+# Check back soon.
 ```
 ## ROS2 Integration
 ```python
 # Check back soon.
+```
+
+## Connectvity issues
+```shell
+sudo export CYCLONEDDS_URI="file:///{filepath to wyrm/cyclonedds.xml}"
+```
+**Highly Recommended : Add above line to ~/.bashrc*
+
+```shell
+sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" destination address="239.255.0.1" accept'
+sudo firewall-cmd --permanent --add-port=7400/udp
 ```
