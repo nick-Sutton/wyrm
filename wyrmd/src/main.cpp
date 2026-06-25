@@ -16,14 +16,16 @@
 #include <fmt/color.h>
 #include "NatNetTypes.h"
 #include "NatNetClient.h"
-#include "zenoh.hxx"
-#include <wyrm/types.hpp> 
-#include <wyrm/serialization.hpp>
-#include <wyrm/keys.hpp>
+#include "dds/dds.hpp"
+
+#include <wyrm/aliases.hpp> 
+#include <wyrm/topics.hpp>
 
 #include "io.hpp"
 #include "net.hpp"
 #include "context.hpp"
+
+using namespace org::eclipse::cyclonedds;
 
 static std::atomic<bool> g_running{true};
 static void signal_handler(int) {
@@ -45,31 +47,31 @@ int main(int argc, char* argv[]) {
 
         io.LogMessage("Configuring Wyrm Context", INFO);
 
-        // Setup Zenoh Session
-        auto config = zenoh::Config::create_default();
-        auto session = zenoh::Session::open(std::move(config));
+        /* Domain and Publisher (ROS_DOMAIN_ID = 42)*/
+        dds::domain::DomainParticipant participant(42);
+        dds::pub::Publisher publisher(participant);
+
+        /* Description topic/writer */
+        dds::topic::Topic<WyrmDescription> description_topic(participant, WyrmDescriptionTopic);
+
+       /* TRANSIENT_LOCAL so late-joining subscribers still receive current description set without needing to query for it. */
+        dds::pub::qos::DataWriterQos description_writer_qos = publisher.default_datawriter_qos()
+            << dds::core::policy::Durability::TransientLocal()
+            << dds::core::policy::Reliability::Reliable();
+        dds::pub::DataWriter<WyrmDescription> description_writer(publisher, description_topic, description_writer_qos);
+        
+        /* Frame topic/writer */
+        dds::topic::Topic<WyrmFrame> frame_topic(participant, WyrmFrameTopic);
+        dds::pub::DataWriter<WyrmFrame> frame_writer(publisher, frame_topic);
 
         WyrmContext wyrm_ctx{};
-        wyrm_ctx.session = &session;
+        wyrm_ctx.description_writer = &description_writer;
+        wyrm_ctx.frame_writer = &frame_writer;
 
         // Get Data Descriptions from server and build Rigid Body Description table
         sDataDescriptions* descriptions = nullptr;
         client.GetDataDescriptionList(&descriptions);
         BuildDescriptionTable(descriptions, wyrm_ctx);
-
-        // Create a queryable for data descriptions
-        auto queryable = wyrm_ctx.session->declare_queryable(
-            WyrmDescKeyexpr,
-            [&wyrm_ctx](const zenoh::Query& query) {
-                std::lock_guard<std::mutex> lock(wyrm_ctx.descriptions_mutex);
-                auto payload = SerializeDescriptions(wyrm_ctx.descriptions);
-                query.reply(
-                    WyrmDescKeyexpr,
-                    zenoh::Bytes(std::move(payload))
-                );
-            },
-            zenoh::closures::none  // on_drop handler
-        );
 
         std::signal(SIGINT,  signal_handler);
         std::signal(SIGTERM, signal_handler);
@@ -94,7 +96,7 @@ int main(int argc, char* argv[]) {
             lock.unlock();
 
             // Check for model list change before publishing
-            if (frame.model_list_changed) {
+            if (frame.model_list_changed()) {
                 sDataDescriptions* desc = nullptr;
                 client.GetDataDescriptionList(&desc); // since this is a blocking call we need to do it outside the lock
 
@@ -108,16 +110,12 @@ int main(int argc, char* argv[]) {
                 io.LogMessage("Model list changed, descriptions updated.", INFO);
             }
 
-            // Send payload over Zenoh
-            auto payload = SerializeFrame(frame);
-            session.put(WyrmFrameKeyexpr,
-                        zenoh::Bytes(std::move(payload))
-                    );
+            frame_writer.write(frame);
         }
 
         client.Disconnect();
 
-    } catch (const zenoh::ZException& e) {
+    } catch (const dds::core::Exception& e) {
         io.LogMessage(e.what(), EXCEPTION);
         return EXIT_FAILURE;
     } catch (const std::runtime_error& e) {

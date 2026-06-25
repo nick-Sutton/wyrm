@@ -7,21 +7,23 @@
 
 module wyrm_msgs {
   module msg {
-    @extensibility(APPENDABLE)
-    struct RigidBody {
-      int32 id;
+    module dds_ {
+     @final
+      struct RigidBody_ {
+        int32 id;
 
-      string name;
+        string name;
 
-      geometry_msgs::msg::Point position;
+        geometry_msgs::msg::Point position;
 
-      geometry_msgs::msg::Quaternion orientation;
+        geometry_msgs::msg::Quaternion orientation;
 
-      double mean_error;
+        double mean_error;
 
-      boolean tracking_lost;
+        boolean tracking_lost;
 
-      boolean model_filled;
+        boolean model_filled;
+      };
     };
   };
 };

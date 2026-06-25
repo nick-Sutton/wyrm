@@ -6,23 +6,26 @@
 
 module wyrm_msgs {
   module msg {
-    @extensibility(APPENDABLE)
-    struct Frame {
-      int32 frame_id;
+    module dds_ {
+      @final
+      struct Frame_ {
+        int32 frame_id;
 
-      double timestamp;
+        double timestamp;
 
-      uint32 precision_timestamp_secs;
+        uint32 precision_timestamp_secs;
 
-      uint32 precision_timestamp_fractional_secs;
+        uint32 precision_timestamp_fractional_secs;
 
-      boolean is_recording;
+        boolean is_recording;
 
-      boolean model_list_changed;
+        boolean model_list_changed;
 
-      uint32 body_count;
+        uint32 body_count;
 
-      sequence<wyrm_msgs::msg::RigidBody> bodies;
+        sequence<wyrm_msgs::msg::dds_::RigidBody_> bodies;
+      };
     };
   };
 };
+

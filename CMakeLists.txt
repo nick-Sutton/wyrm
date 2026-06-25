@@ -51,7 +51,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(fmt Catch2 tomlplusplus argparse)
 
 # External Deps
-find_package(CycloneDDS REQUIRED)
+find_package(CycloneDDS-CXX REQUIRED)
 
 if(WYRM_BUILD_TESTS)
     enable_testing()

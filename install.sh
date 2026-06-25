@@ -62,6 +62,16 @@ cmake --install .
 cd / && rm -rf /tmp/cyclonedds
 log "Cyclone-DDS installed."
 
+# Install Cyclone DDS C++ bindings
+log "Installing Cyclone-DDS-CXX..."
+git clone https://github.com/eclipse-cyclonedds/cyclonedds-cxx.git /tmp/cyclonedds-cxx
+cd /tmp/cyclonedds-cxx && mkdir build && cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/.local -DCMAKE_PREFIX_PATH=$HOME/.local
+cmake --build . -j$(nproc)
+cmake --install .
+cd / && rm -rf /tmp/cyclonedds-cxx
+log "Cyclone-DDS-CXX installed."
+
 # Environment 
 if ! grep -q "CMAKE_PREFIX_PATH" $HOME/.bashrc; then
     echo 'export CMAKE_PREFIX_PATH=$HOME/.local:$CMAKE_PREFIX_PATH' >> $HOME/.bashrc

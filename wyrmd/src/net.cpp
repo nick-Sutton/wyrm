@@ -20,23 +20,23 @@
 WyrmRigidBody ToWyrmBody(const sRigidBodyData& src,
                                  const std::unordered_map<int32_t, WyrmDescription>& descriptions) {
     WyrmRigidBody body{};
-    body.id           = src.ID;
-    body.x            = src.x;
-    body.y            = src.y;
-    body.z            = src.z;
-    body.qx           = src.qx;
-    body.qy           = src.qy;
-    body.qz           = src.qz;
-    body.qw           = src.qw;
-    body.mean_error   = src.MeanError;
-    body.tracking_lost = src.params & 0x01;
-    body.model_filled  = src.params & 0x02;
+    body.id()                       = src.ID;
+    body.position().x()             = src.x;
+    body.position().y()             = src.y;
+    body.position().z()             = src.z;
+    body.orientation().x()          = src.qx;
+    body.orientation().y()          = src.qy;
+    body.orientation().z()          = src.qz;
+    body.orientation().w()          = src.qw;
+    body.mean_error()               = src.MeanError;
+    body.tracking_lost()            = src.params & 0x01;
+    body.model_filled()             = src.params & 0x02;
 
     auto it = descriptions.find(src.ID);
     if (it != descriptions.end()) {
-        body.name = it->second.name;
+        body.name() = it->second.name();
     } else {
-        body.name = "body_" + std::to_string(src.ID);
+        body.name() = "body_" + std::to_string(src.ID);
     }
     return body;
 }
@@ -50,17 +50,17 @@ WyrmRigidBody ToWyrmBody(const sRigidBodyData& src,
 WyrmFrame ToWyrmFrame(const sFrameOfMocapData& src,
                               const std::unordered_map<int32_t, WyrmDescription>& descriptions) {
     WyrmFrame frame{};
-    frame.frame_id                           = src.iFrame;
-    frame.timestamp                          = src.fTimestamp;
-    frame.precision_timestamp_secs           = src.PrecisionTimestampSecs;
-    frame.precision_timestamp_fractional_secs = src.PrecisionTimestampFractionalSecs;
-    frame.is_recording                       = src.params & 0x01;
-    frame.model_list_changed                 = src.params & 0x02;
-    frame.body_count                         = src.nRigidBodies;
+    frame.frame_id()                            = src.iFrame;
+    frame.timestamp()                           = src.fTimestamp;
+    frame.precision_timestamp_secs()            = src.PrecisionTimestampSecs;
+    frame.precision_timestamp_fractional_secs() = src.PrecisionTimestampFractionalSecs;
+    frame.is_recording()                        = src.params & 0x01;
+    frame.model_list_changed()                  = src.params & 0x02;
+    frame.body_count()                          = src.nRigidBodies;
 
-    frame.bodies.reserve(src.nRigidBodies);
+    frame.bodies().reserve(src.nRigidBodies);
     for (int i = 0; i < src.nRigidBodies; i++) {
-        frame.bodies.push_back(ToWyrmBody(src.RigidBodies[i], descriptions));
+        frame.bodies().push_back(ToWyrmBody(src.RigidBodies[i], descriptions));
     }
     return frame;
 }
@@ -72,10 +72,10 @@ WyrmFrame ToWyrmFrame(const sFrameOfMocapData& src,
  */ 
 WyrmDescription ToWyrmDescription(const sRigidBodyDescription& src) {
     WyrmDescription description{};
-    description.id          = src.ID;
-    description.parent_id   = src.parentID;
-    description.num_markers = src.nMarkers;
-    description.name = src.szName;
+    description.id()          = src.ID;
+    description.parent_id()   = src.parentID;
+    description.num_markers() = src.nMarkers;
+    description.name() = src.szName;
     return description;
 }
 

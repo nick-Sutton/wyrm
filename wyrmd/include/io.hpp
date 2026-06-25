@@ -11,7 +11,7 @@
 #pragma once
 
 #include <string>
-#include <wyrm/types.hpp> 
+#include <wyrm/aliases.hpp> 
 #include "NatNetTypes.h"
 #include "NatNetClient.h"
 #include "context.hpp"

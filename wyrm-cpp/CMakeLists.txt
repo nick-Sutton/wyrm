@@ -3,7 +3,7 @@ include(CMakePackageConfigHelpers)
 
 set(WYRM_IDL_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/idl-generated)
 
-idlc_generate(TARGET wyrm-idl
+idlcxx_generate(TARGET wyrm-idl
     FILES
         idl/geometry_msgs/msg/Point.idl
         idl/geometry_msgs/msg/Quaternion.idl
@@ -16,7 +16,7 @@ idlc_generate(TARGET wyrm-idl
 )
 
 add_library(wyrm-cpp
-    src/serialization.cpp
+    
 )
 
 target_sources(wyrm-cpp
@@ -28,13 +28,14 @@ add_dependencies(wyrm-cpp wyrm-idl)
 target_include_directories(wyrm-cpp
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/..>
         $<BUILD_INTERFACE:${WYRM_IDL_OUTPUT_DIR}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
 target_link_libraries(wyrm-cpp
     PUBLIC
-        CycloneDDS::ddsc
+        CycloneDDS-CXX::ddscxx
 )
 
 install(TARGETS wyrm-cpp
@@ -49,7 +50,7 @@ install(DIRECTORY include/
 
 install(DIRECTORY ${WYRM_IDL_OUTPUT_DIR}/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    FILES_MATCHING PATTERN "*.h"
+    FILES_MATCHING PATTERN "*.hpp"
 )
 
 install(EXPORT wyrm-cpp-targets

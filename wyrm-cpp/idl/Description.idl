@@ -5,15 +5,17 @@
 
 module wyrm_msgs {
   module msg {
-    @extensibility(APPENDABLE)
-    struct Description {
-      int32 id;
+    module dds_ {
+      @final
+      struct Description_ {
+        int32 id;
 
-      int32 parent_id;
+        int32 parent_id;
 
-      string name;
+        string name;
 
-      int32 num_markers;
+        int32 num_markers;
+      };
     };
   };
 };
