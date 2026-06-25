@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
             << dds::core::policy::Reliability::Reliable();
         dds::pub::DataWriter<WyrmDescription> description_writer(publisher, description_topic, description_writer_qos);
         
-        /* Frame topic/writer */
+        /* Frame topic/writer, default QOS */
         dds::topic::Topic<WyrmFrame> frame_topic(participant, WyrmFrameTopic);
         dds::pub::DataWriter<WyrmFrame> frame_writer(publisher, frame_topic);
 
